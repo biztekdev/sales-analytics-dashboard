@@ -162,17 +162,17 @@ export default function ThemeDisplay() {
           <div className='xl-plus:px-[100px] px-[50px]'>
             <Header />
             <div className=''>
-              {/* {showSalesDashboard && ( */}
+              {showSalesDashboard && ( 
                 <SalesDashboard 
                   currentIndex={currentIndex} 
                   setCurrentIndex={setCurrentIndex} 
                   userNames={userNames} 
                   setUserNames={setUserNames} 
                 />
-              {/* )} */}
-              {/* {showSummary && (
+              )} 
+               {showSummary && (
                 <SummaryCom/>
-)}  */}
+)}  
             </div>
           </div>
           <div className='xl-plus:mt-[51px] mt-[30px] 2xl:absolute bottom-0 w-full'>

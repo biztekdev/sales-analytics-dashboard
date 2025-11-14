@@ -16,7 +16,7 @@ export function SocketDataProvider({ children }) {
 
   useEffect(() => {
     // Connect socket
-    const newSocket = io("http://localhost:5000", {
+    const newSocket = io("https://pipefish-united-poorly.ngrok-free.app", {
       transports: ["websocket"],
     })
 
@@ -47,7 +47,25 @@ export function SocketDataProvider({ children }) {
     // Listen for sales analytics updates
     newSocket.on("salesAnalytics", (data) => {
       console.log("📊 Analytics received:", data)
-      setSalesAnalytics(data)
+      
+      // Filter to show only user with id 85
+      // if (data?.data?.salesAnalyticsUserWise) {
+      //   const filteredData = {
+      //     ...data,
+      //     data: {
+      //       ...data.data,
+      //       salesAnalyticsUserWise: Object.fromEntries(
+      //         Object.entries(data.data.salesAnalyticsUserWise).filter(
+      //           ([key, item]) => item?.userInfo?.id === 85
+      //         )
+      //       )
+      //     }
+      //   }
+      //   console.log("🔍 Filtered data for ID 85:", filteredData)
+      //   setSalesAnalytics(filteredData)
+      // } else {
+        setSalesAnalytics(data)
+      // }
     })
 
     // Listen for sales summary updates
