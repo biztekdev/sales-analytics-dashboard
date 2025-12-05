@@ -7,11 +7,11 @@ import { Coffee, Smile, Zap, Moon, Wind } from "lucide-react";
 // Break Time Quotes - 22 Working Days (Mon-Fri, 4 weeks + 2 days)
 const breakTimeQuotes = [
   // Week 1
-  { day: 1, dayName: "Monday", breakType: "Morning Break", icon: Coffee, color: "from-amber-500 to-orange-500", quote: "Second half reloaded — let’s go stronger!", tip: "Stretch your shoulders and hydrate yourself", audio: "/voices/monday1.mp3" },
+  { day: 1, dayName: "Monday", breakType: "Morning Break", icon: Coffee, color: "from-amber-500 to-orange-500", quote: "Second half reloaded — let’s go stronger!", tip: "Stretch your shoulders and hydrate yourself", audio: "/voices/break day1.mp3" },
   { day: 2, dayName: "Tuesday", breakType: "Morning Break", icon: Coffee, color: "from-amber-500 to-orange-500", quote: "Afternoon success belongs to those who stay consistent.", tip: "Step outside for 5 minutes of fresh air", audio: "/voices/day2.mp3" },
   { day: 3, dayName: "Wednesday", breakType: "Lunch Break", icon: Smile, color: "from-green-500 to-emerald-500", quote: "Now is the time to convert leads into results.", tip: "Take time to enjoy your meal mindfully", audio: "/voices/day3.mp3" },
   { day: 4, dayName: "Thursday", breakType: "Afternoon Break", icon: Zap, color: "from-blue-500 to-cyan-500", quote: "Don't slow down — speed up!", tip: "Do 10 quick jumping jacks to boost energy", audio: "/voices/day 4.mp3" },
-  { day: 5, dayName: "Friday", breakType: "Evening Break", icon: Moon, color: "from-indigo-500 to-purple-500", quote: "One strong afternoon can change the entire day’s numbers.", tip: "Reflect on what you accomplished this week", audio: "/voices/day 5.mp3" },
+  { day: 5, dayName: "Friday", breakType: "Evening Break", icon: Moon, color: "from-indigo-500 to-purple-500", quote: "One strong afternoon can change the entire day’s numbers.", tip: "Reflect on what you accomplished this week", audio: "/voices/break/day 6.mp3" },
   
   // Week 2
   { day: 6, dayName: "Monday", breakType: "Morning Break", icon: Coffee, color: "from-amber-500 to-orange-500", quote: "Push harder — the finish line is getting closer.", tip: "Do some light stretching exercises", audio: "/voices/day 6.mp3" },

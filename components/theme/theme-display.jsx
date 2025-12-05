@@ -527,7 +527,7 @@ export default function ThemeDisplay() {
       const minutes = now.getMinutes();
       
       // Show motivational greeting at 16:32 (4:32 PM)
-      if (hours === 4 && minutes === 55 && !motivationalShownToday) {
+      if (hours === 19 && minutes === 30 && !motivationalShownToday) {
         setMotivationalShownToday(true);
         setShowMotivational(true);
         setShowGreeting(false);
@@ -566,7 +566,7 @@ export default function ThemeDisplay() {
       const minutes = now.getMinutes();
       
       // Show break time quotes at 3:28 AM (03:28)
-      if (hours === 3 && minutes === 39 && !breakTimeShownToday) {
+      if (hours === 1 && minutes === 0 && !breakTimeShownToday) {
         setBreakTimeShownToday(true);
         setShowBreakTimeQuotes(true);
         setShowGreeting(false);
@@ -891,12 +891,12 @@ export default function ThemeDisplay() {
   }
 
   // Show break time quotes at 3:28 AM
-  if (showBreakTimeQuotes) {
+  if (!showBreakTimeQuotes) {
     return <BreakTimeQuotes isVisible={true} />;
   }
 
   // Show motivational greeting at 4:32 PM
-  if (!showMotivational) {
+  if (showMotivational) {
     return <MotivationalGreeting isVisible={true} />;
   }
 
