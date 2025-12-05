@@ -376,6 +376,32 @@ export default function ThemeDisplay() {
 
   const audioContextRef = useRef(null);
 
+  const playAIvoice = async (text) => {
+  const apiKey = "7751dec2849769f6acfa4dca4281355c54ab5ddc73ba9dc4e0e4d71675b63fdc";
+
+  const response = await fetch(
+    "https://api.elevenlabs.io/v1/text-to-speech/N2lVS1w4EtoT3dr4eOWO",  // Default Riley voice
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "xi-api-key": apiKey,
+      },
+      body: JSON.stringify({
+        text: text,
+        voice_settings: {
+          stability: 0.4,
+          similarity_boost: 0.8,
+        },
+      }),
+    }
+  );
+
+  const audioBlob = await response.blob();
+  const audioUrl = URL.createObjectURL(audioBlob);
+  const audio = new Audio(audioUrl);
+  audio.play();
+};
   // Initialize audio context on user interaction
   useEffect(() => {
     const initAudio = () => {
@@ -488,6 +514,7 @@ export default function ThemeDisplay() {
     const currentName = userNames[currentIndex];
     console.log("🎤 Speaking: ", currentName);
     setTimeout(() => {
+      // playAIvoice(currentName, selectedVoice);
       speakUserName(currentName, selectedVoice);
     }, 2000);
   }, [currentIndex, userNames]);
@@ -527,7 +554,7 @@ export default function ThemeDisplay() {
       const minutes = now.getMinutes();
       
       // Show motivational greeting at 16:32 (4:32 PM)
-      if (hours === 19 && minutes === 30 && !motivationalShownToday) {
+      if (hours === 19 && minutes === 35 && !motivationalShownToday) {
         setMotivationalShownToday(true);
         setShowMotivational(true);
         setShowGreeting(false);
