@@ -7,36 +7,36 @@ import { Coffee, Smile, Zap, Moon, Wind } from "lucide-react";
 // Break Time Quotes - 22 Working Days (Mon-Fri, 4 weeks + 2 days)
 const breakTimeQuotes = [
   // Week 1
-  { day: 1, dayName: "Monday", breakType: "Morning Break", icon: Coffee, color: "from-amber-500 to-orange-500", quote: "Second half reloaded — let’s go stronger!", tip: "Stretch your shoulders and hydrate yourself", audio: "/audio/break/day_1.mp3" },
-  { day: 2, dayName: "Tuesday", breakType: "Morning Break", icon: Coffee, color: "from-amber-500 to-orange-500", quote: "Afternoon success belongs to those who stay consistent.", tip: "Step outside for 5 minutes of fresh air", audio: "/audio/break/day_2.mp3" },
-  { day: 3, dayName: "Wednesday", breakType: "Lunch Break", icon: Smile, color: "from-green-500 to-emerald-500", quote: "Now is the time to convert leads into results.", tip: "Take time to enjoy your meal mindfully", audio: "/audio/break/day_3.mp3" },
-  { day: 4, dayName: "Thursday", breakType: "Afternoon Break", icon: Zap, color: "from-blue-500 to-cyan-500", quote: "Don't slow down — speed up!", tip: "Do 10 quick jumping jacks to boost energy", audio: "/audio/break/day_4.mp3" },
-  { day: 5, dayName: "Friday", breakType: "Evening Break", icon: Moon, color: "from-indigo-500 to-purple-500", quote: "One strong afternoon can change the entire day’s numbers.", tip: "Reflect on what you accomplished this week", audio: "/audio/break/day_5.mp3" },
+  { day: 1, dayName: "Monday", breakType: "After Break ", icon: Smile, color: "from-amber-500 to-orange-500", quote: "Second half reloaded — let’s go stronger!", tip: "Stretch your shoulders and hydrate yourself", audio: "/audio/break/day_1.mp3" },
+  { day: 2, dayName: "Tuesday", breakType: "After Break ", icon: Smile, color: "from-amber-500 to-orange-500", quote: "Afternoon success belongs to those who stay consistent.", tip: "Step outside for 5 minutes of fresh air", audio: "/audio/break/day_2.mp3" },
+  { day: 3, dayName: "Wednesday", breakType: "After Break", icon: Smile, color: "from-green-500 to-emerald-500", quote: "Now is the time to convert leads into results.", tip: "Take time to enjoy your meal mindfully", audio: "/audio/break/day_3.mp3" },
+  { day: 4, dayName: "Thursday", breakType: "After Break ", icon: Smile, color: "from-blue-500 to-cyan-500", quote: "Don't slow down — speed up!", tip: "Do 10 quick jumping jacks to boost energy", audio: "/audio/break/day_4.mp3" },
+  { day: 5, dayName: "Friday", breakType: "After Break", icon: Smile, color: "from-indigo-500 to-purple-500", quote: "One strong afternoon can change the entire day’s numbers.", tip: "Reflect on what you accomplished this week", audio: "/audio/break/day_5.mp3" },
   
   // Week 2
-  { day: 6, dayName: "Monday", breakType: "Morning Break", icon: Coffee, color: "from-amber-500 to-orange-500", quote: "Push harder — the finish line is getting closer.", tip: "Do some light stretching exercises", audio: "/audio/break/day_6.mp3" },
-  { day: 7, dayName: "Tuesday", breakType: "Morning Break", icon: Coffee, color: "from-amber-500 to-orange-500", quote: "Your best calls might still be ahead of you.", tip: "Breathe deeply for 2 minutes", audio: "/audio/break/day_7.mp3" },
-  { day: 8, dayName: "Wednesday", breakType: "Lunch Break", icon: Smile, color: "from-green-500 to-emerald-500", quote: "You’ve reset — now rise!", tip: "Walk around while eating if possible", audio: "/audio/break/day_8.mp3" },
-  { day: 9, dayName: "Thursday", breakType: "Afternoon Break", icon: Zap, color: "from-blue-500 to-cyan-500", quote: "Momentum wins targets. Keep the rhythm.", tip: "Splash cold water on your face", audio: "/audio/break/day_9.mp3" },
-  { day: 10, dayName: "Friday", breakType: "Evening Break", icon: Moon, color: "from-indigo-500 to-purple-500", quote: "Every follow-up is a step closer to closing.", tip: "Prepare your mind for next week", audio: "/audio/break/day_10.mp3" },
+  { day: 6, dayName: "Monday", breakType: "After Break ", icon: Smile, color: "from-amber-500 to-orange-500", quote: "Push harder — the finish line is getting closer.", tip: "Do some light stretching exercises", audio: "/audio/break/day_6.mp3" },
+  { day: 7, dayName: "Tuesday", breakType: "After Break ", icon: Smile, color: "from-amber-500 to-orange-500", quote: "Your best calls might still be ahead of you.", tip: "Breathe deeply for 2 minutes", audio: "/audio/break/day_7.mp3" },
+  { day: 8, dayName: "Wednesday", breakType: "After Break", icon: Smile, color: "from-green-500 to-emerald-500", quote: "You’ve reset — now rise!", tip: "Walk around while eating if possible", audio: "/audio/break/day_8.mp3" },
+  { day: 9, dayName: "Thursday", breakType: "After Break ", icon: Smile, color: "from-blue-500 to-cyan-500", quote: "Momentum wins targets. Keep the rhythm.", tip: "Splash cold water on your face", audio: "/audio/break/day_9.mp3" },
+  { day: 10, dayName: "Friday", breakType: "After Break", icon: Smile, color: "from-indigo-500 to-purple-500", quote: "Every follow-up is a step closer to closing.", tip: "Prepare your mind for next week", audio: "/audio/break/day_10.mp3" },
   
   // Week 3
-  { day: 11, dayName: "Monday", breakType: "Morning Break", icon: Coffee, color: "from-amber-500 to-orange-500", quote: "Stay hungry. Stay driven.", tip: "Hydrate with a full glass of water", audio: "/audio/break/day_11.mp3" },
-  { day: 12, dayName: "Tuesday", breakType: "Morning Break", icon: Coffee, color: "from-amber-500 to-orange-500", quote: "Winners don’t rely on the morning — they dominate the afternoon.", tip: "Stand up and stretch for 1 minute", audio: "/audio/break/day_12.mp3" },
-  { day: 13, dayName: "Wednesday", breakType: "Lunch Break", icon: Smile, color: "from-green-500 to-emerald-500", quote: "Your effort now defines your closing achievements.", tip: "Avoid heavy foods for better afternoon energy", audio: "/audio/break/day_13.mp3" },
-  { day: 14, dayName: "Thursday", breakType: "Afternoon Break", icon: Zap, color: "from-blue-500 to-cyan-500", quote: "Be the reason the team finishes the day with pride.", tip: "Look away from screen for 20 seconds", audio: "/audio/break/day_14.mp3" },
-  { day: 15, dayName: "Friday", breakType: "Evening Break", icon: Moon, color: "from-indigo-500 to-purple-500", quote: "Half the day is gone — the best half starts now!", tip: "Take deep breaths and relax your muscles", audio: "/audio/break/day_15.mp3" },
+  { day: 11, dayName: "Monday", breakType: "After Break ", icon: Smile, color: "from-amber-500 to-orange-500", quote: "Stay hungry. Stay driven.", tip: "Hydrate with a full glass of water", audio: "/audio/break/day_11.mp3" },
+  { day: 12, dayName: "Tuesday", breakType: "After Break ", icon: Smile, color: "from-amber-500 to-orange-500", quote: "Winners don’t rely on the morning — they dominate the afternoon.", tip: "Stand up and stretch for 1 minute", audio: "/audio/break/day_12.mp3" },
+  { day: 13, dayName: "Wednesday", breakType: "After Break", icon: Smile, color: "from-green-500 to-emerald-500", quote: "Your effort now defines your closing achievements.", tip: "Avoid heavy foods for better afternoon energy", audio: "/audio/break/day_13.mp3" },
+  { day: 14, dayName: "Thursday", breakType: "After Break ", icon: Smile, color: "from-blue-500 to-cyan-500", quote: "Be the reason the team finishes the day with pride.", tip: "Look away from screen for 20 seconds", audio: "/audio/break/day_14.mp3" },
+  { day: 15, dayName: "Friday", breakType: "After Break", icon: Smile, color: "from-indigo-500 to-purple-500", quote: "Half the day is gone — the best half starts now!", tip: "Take deep breaths and relax your muscles", audio: "/audio/break/day_15.mp3" },
   
   // Week 4
-  { day: 16, dayName: "Monday", breakType: "Morning Break", icon: Coffee, color: "from-amber-500 to-orange-500", quote: "Don’t let leads cool down — bring heat!", tip: "Do neck rolls slowly and carefully", audio: "/audio/break/day_16.mp3" },
-  { day: 17, dayName: "Tuesday", breakType: "Morning Break", icon: Coffee, color: "from-amber-500 to-orange-500", quote: "You came to work — now let's rest to win!", tip: "Close your eyes and relax for 30 seconds", audio: "/audio/break/day_17.mp3" },
-  { day: 18, dayName: "Wednesday", breakType: "Lunch Break", icon: Smile, color: "from-green-500 to-emerald-500", quote: "Fuel up for the final stretch of the week!", tip: "Eat something that energizes you", audio: "/audio/break/day_18.mp3" },
-  { day: 19, dayName: "Thursday", breakType: "Afternoon Break", icon: Zap, color: "from-blue-500 to-cyan-500", quote: "One more day! You're making it happen!", tip: "Jump up and down 10 times", audio: "/audio/break/day_19.mp3" },
-  { day: 20, dayName: "Friday", breakType: "Evening Break", icon: Moon, color: "from-indigo-500 to-purple-500", quote: "Month complete! You crushed it!", tip: "Celebrate your hard work and dedication", audio: "/audio/break/day_20.mp3" },
+  { day: 16, dayName: "Monday", breakType: "After Break ", icon: Smile, color: "from-amber-500 to-orange-500", quote: "Don’t let leads cool down — bring heat!", tip: "Do neck rolls slowly and carefully", audio: "/audio/break/day_16.mp3" },
+  { day: 17, dayName: "Tuesday", breakType: "After Break ", icon: Smile, color: "from-amber-500 to-orange-500", quote: "You came to work — now let's rest to win!", tip: "Close your eyes and relax for 30 seconds", audio: "/audio/break/day_17.mp3" },
+  { day: 18, dayName: "Wednesday", breakType: "After Break", icon: Smile, color: "from-green-500 to-emerald-500", quote: "Fuel up for the final stretch of the week!", tip: "Eat something that energizes you", audio: "/audio/break/day_18.mp3" },
+  { day: 19, dayName: "Thursday", breakType: "After Break ", icon: Smile, color: "from-blue-500 to-cyan-500", quote: "One more day! You're making it happen!", tip: "Jump up and down 10 times", audio: "/audio/break/day_19.mp3" },
+  { day: 20, dayName: "Friday", breakType: "After Break", icon: Smile, color: "from-indigo-500 to-purple-500", quote: "Month complete! You crushed it!", tip: "Celebrate your hard work and dedication", audio: "/audio/break/day_20.mp3" },
   
   // Extra 2 days (for full month coverage)
-  { day: 21, dayName: "Monday", breakType: "Morning Break", icon: Coffee, color: "from-amber-500 to-orange-500", quote: "New month, same excellence! Rest and reset!", tip: "Meditate for 1 minute", audio: "/audio/break/day_21.mp3" },
-  { day: 22, dayName: "Tuesday", breakType: "Morning Break", icon: Coffee, color: "from-amber-500 to-orange-500", quote: "Every break brings you closer to success!", tip: "Listen to calming music during your break", audio: "/audio/break/day_22.mp3" },
+  { day: 21, dayName: "Monday", breakType: "After Break ", icon: Smile, color: "from-amber-500 to-orange-500", quote: "New month, same excellence! Rest and reset!", tip: "Meditate for 1 minute", audio: "/audio/break/day_21.mp3" },
+  { day: 22, dayName: "Tuesday", breakType: "After Break ", icon: Smile, color: "from-amber-500 to-orange-500", quote: "Every break brings you closer to success!", tip: "Listen to calming music during your break", audio: "/audio/break/day_22.mp3" },
 ];
 
 // Function to get current working day number (1-22) based on UTC-6 timezone
@@ -171,7 +171,7 @@ export default function BreakTimeQuotes({ isVisible }) {
                 <div>
                   <div className="text-white/70 text-xs xl-plus:text-5xl font-medium uppercase tracking-wider">Working Day</div>
                   <div className="text-white text-2xl xl-plus:text-6xl font-black">
-                    Day {currentQuote.day} • {currentQuote.dayName}
+                  {currentQuote.dayName}
                   </div>
                 </div>
               </div>
@@ -237,9 +237,9 @@ export default function BreakTimeQuotes({ isVisible }) {
               transition={{ delay: 0.8, duration: 0.8 }}
               className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-8 xl-plus:p-12"
             >
-              <p className="text-white/90 text-xl xl-plus:text-7xl font-semibold">
-                💡 <span className="ml-3"> {currentQuote.quote}</span>
-              </p>
+              <span style={{fontFamily:"cursive"}} className="text-white/90 text-xl xl-plus:text-8xl font-semibold">
+                💡 <span  className="ml-3"> {currentQuote.quote}</span>
+              </span>
             </motion.div>
 
             {/* Time Display */}

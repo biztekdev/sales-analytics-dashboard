@@ -564,7 +564,7 @@ useEffect(() => {
     const minutes = now.getMinutes();
 
     // Hit API only at 4:33 AM once per day
-    if (hours === 24 && minutes === 0 && !birthdayShownToday) {
+   if (hours === 23 && ( minutes === 58 || minutes === 59) && !birthdayShownToday) {
       try {
        
         const response = await fetch('/api/birthday');
@@ -595,7 +595,13 @@ useEffect(() => {
             
 
             // Compare month and day only (ignore year)
-            if (birthdayDay === todayDay && birthdayMonth === todayMonth) {
+            if 
+            // (birthdayDay === todayDay && birthdayMonth === todayMonth)
+             (
+  (birthdayDay === todayDay && birthdayMonth === todayMonth) || 
+  (birthdayDay === todayDay + 1 && birthdayMonth === todayMonth)
+)
+            {
               
               
               setBirthdayName(firstBirthday.name || "Friend");

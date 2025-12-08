@@ -2,41 +2,41 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Moon, Star, Sunset, Sparkles } from "lucide-react";
+import { Moon } from "lucide-react";
 
 // Off Time Screen Quotes - 22 Working Days (Mon-Fri, 4 weeks + 2 days)
 const offTimeQuotes = [
   // Week 1
   { day: 1, dayName: "Monday", quote: "Last hour, best hour — finish strong!", message: "See you tomorrow, champion!", icon: Moon, color: "from-slate-800 to-purple-900", audio: "/audio/exit/day_1.mp3" },
-  { day: 2, dayName: "Tuesday", quote: "Close the day with pride, not regret!", message: "Your hard work pays off — enjoy your evening!", icon: Sunset, color: "from-orange-800 to-red-900", audio: "/audio/exit/day_2.mp3" },
-  { day: 3, dayName: "Wednesday", quote: "Your final push today builds tomorrow’s momentum.", message: "Rest well. Tomorrow awaits your energy.", icon: Star, color: "from-indigo-800 to-blue-900", audio: "/audio/exit/day_3.mp3" },
-  { day: 4, dayName: "Thursday", quote: "One more call can change the whole day.", message: "See you fresh tomorrow morning!", icon: Sparkles, color: "from-pink-800 to-purple-900", audio: "/audio/exit/day_4.mp3" },
+  { day: 2, dayName: "Tuesday", quote: "Close the day with pride, not regret!", message: "Your hard work pays off — enjoy your evening!", icon: Moon, color: "from-orange-800 to-red-900", audio: "/audio/exit/day_2.mp3" },
+  { day: 3, dayName: "Wednesday", quote: "Your final push today builds tomorrow’s momentum.", message: "Rest well. Tomorrow awaits your energy.", icon: Moon, color: "from-indigo-800 to-blue-900", audio: "/audio/exit/day_3.mp3" },
+  { day: 4, dayName: "Thursday", quote: "One more call can change the whole day.", message: "See you fresh tomorrow morning!", icon: Moon, color: "from-pink-800 to-purple-900", audio: "/audio/exit/day_4.mp3" },
   { day: 5, dayName: "Friday", quote: "End the day like a champion — strong and confident.", message: "Enjoy your weekend — you've earned it!", icon: Moon, color: "from-emerald-800 to-teal-900", audio: "/audio/exit/day_5.mp3" },
   
   // Week 2
-  { day: 6, dayName: "Monday", quote: "Results come to those who finish, not those who quit early.", message: "Recharge and reset for tomorrow.", icon: Sunset, color: "from-amber-800 to-orange-900", audio: "/audio/exit/day_6.mp3" },
-  { day: 7, dayName: "Tuesday", quote: "If you didn’t give up today, you already won.", message: "Sleep well, wake up stronger.", icon: Star, color: "from-violet-800 to-purple-900", audio: "/audio/exit/day_7.mp3" },
-  { day: 8, dayName: "Wednesday", quote: "Push now so tomorrow becomes easier.", message: "Rest is part of the winning formula.", icon: Sparkles, color: "from-blue-800 to-indigo-900", audio: "/audio/exit/day_8.mp3" },
+  { day: 6, dayName: "Monday", quote: "Results come to those who finish, not those who quit early.", message: "Recharge and reset for tomorrow.", icon: Moon, color: "from-amber-800 to-orange-900", audio: "/audio/exit/day_6.mp3" },
+  { day: 7, dayName: "Tuesday", quote: "If you didn’t give up today, you already won.", message: "Sleep well, wake up stronger.", icon: Moon, color: "from-violet-800 to-purple-900", audio: "/audio/exit/day_7.mp3" },
+  { day: 8, dayName: "Wednesday", quote: "Push now so tomorrow becomes easier.", message: "Rest is part of the winning formula.", icon:Moon , color: "from-blue-800 to-indigo-900", audio: "/audio/exit/day_8.mp3" },
   { day: 9, dayName: "Thursday", quote: "“Don't leave success for tomorrow — close it today.", message: "Tomorrow starts with tonight's rest.", icon: Moon, color: "from-cyan-800 to-blue-900", audio: "/audio/exit/day_9.mp3" },
-  { day: 10, dayName: "Friday", quote: "Your dedication in the last hour defines you as a closer.", message: "Weekend mode: ON. You deserve it!", icon: Sunset, color: "from-rose-800 to-pink-900", audio: "/audio/exit/day_10.mp3" },
+  { day: 10, dayName: "Friday", quote: "Your dedication in the last hour defines you as a closer.", message: "Weekend mode: ON. You deserve it!", icon: Moon, color: "from-rose-800 to-pink-900", audio: "/audio/exit/day_10.mp3" },
   
   // Week 3
-  { day: 11, dayName: "Monday", quote: "Stay sharp — great closers don’t slow down near the finish line.", message: "See you tomorrow, ready to lead again.", icon: Star, color: "from-purple-800 to-fuchsia-900", audio: "/audio/exit/day_11.mp3" },
-  { day: 12, dayName: "Tuesday", quote: "Every minute counts — use them wisely.", message: "Recharge your mind and body tonight.", icon: Sparkles, color: "from-teal-800 to-cyan-900", audio: "/audio/exit/day_12.mp3" },
+  { day: 11, dayName: "Monday", quote: "Stay sharp — great closers don’t slow down near the finish line.", message: "See you tomorrow, ready to lead again.", icon: Moon, color: "from-purple-800 to-fuchsia-900", audio: "/audio/exit/day_11.mp3" },
+  { day: 12, dayName: "Tuesday", quote: "Every minute counts — use them wisely.", message: "Recharge your mind and body tonight.", icon: Moon, color: "from-teal-800 to-cyan-900", audio: "/audio/exit/day_12.mp3" },
   { day: 13, dayName: "Wednesday", quote: "Day isn’t over until you decide it is.", message: "Rest easy. Tomorrow brings new victories.", icon: Moon, color: "from-indigo-800 to-violet-900", audio: "/audio/exit/day_13.mp3" },
-  { day: 14, dayName: "Thursday", quote: "End with excellence, not exhaustion.", message: "Your effort matters. Now rest matters too.", icon: Sunset, color: "from-orange-800 to-amber-900", audio: "/audio/exit/day_14.mp3" },
-  { day: 15, dayName: "Friday", quote: "Success is built in the moments when others slow down.", message: "Enjoy the weekend — you've earned every second!", icon: Star, color: "from-emerald-800 to-green-900", audio: "/audio/exit/day_15.mp3" },
+  { day: 14, dayName: "Thursday", quote: "End with excellence, not exhaustion.", message: "Your effort matters. Now rest matters too.", icon: Moon, color: "from-orange-800 to-amber-900", audio: "/audio/exit/day_14.mp3" },
+  { day: 15, dayName: "Friday", quote: "Success is built in the moments when others slow down.", message: "Enjoy the weekend — you've earned every second!", icon: Moon, color: "from-emerald-800 to-green-900", audio: "/audio/exit/day_15.mp3" },
   
   // Week 4
-  { day: 16, dayName: "Monday", quote: "Finish today like you want to start tomorrow.", message: "Sleep well tonight. Big things ahead.", icon: Sparkles, color: "from-blue-800 to-purple-900", audio: "/audio/exit/day_16.mp3" },
+  { day: 16, dayName: "Monday", quote: "Finish today like you want to start tomorrow.", message: "Sleep well tonight. Big things ahead.", icon:Moon , color: "from-blue-800 to-purple-900", audio: "/audio/exit/day_16.mp3" },
   { day: 17, dayName: "Tuesday", quote: "One strong close = one step closer to your monthly target", message: "Tomorrow's success starts with tonight's sleep.", icon: Moon, color: "from-slate-800 to-gray-900", audio: "/audio/exit/day_17.mp3" },
-  { day: 18, dayName: "Wednesday", quote: "Don’t leave leads hanging — resolve, follow up, close.", message: "Recharge tonight. Finish strong tomorrow.", icon: Sunset, color: "from-pink-800 to-rose-900", audio: "/audio/exit/day_18.mp3" },
-  { day: 19, dayName: "Thursday", quote: "A closer’s power is in the final push.", message: "Rest up. Tomorrow's the final push.", icon: Star, color: "from-violet-800 to-indigo-900", audio: "/audio/exit/day_19.mp3" },
-  { day: 20, dayName: "Friday", quote: "You’ve made progress; now make results.", message: "Celebrate your wins this weekend!", icon: Sparkles, color: "from-amber-800 to-yellow-900", audio: "/audio/exit/day_20.mp3" },
+  { day: 18, dayName: "Wednesday", quote: "Don’t leave leads hanging — resolve, follow up, close.", message: "Recharge tonight. Finish strong tomorrow.", icon: Moon, color: "from-pink-800 to-rose-900", audio: "/audio/exit/day_18.mp3" },
+  { day: 19, dayName: "Thursday", quote: "A closer’s power is in the final push.", message: "Rest up. Tomorrow's the final push.", icon: Moon, color: "from-violet-800 to-indigo-900", audio: "/audio/exit/day_19.mp3" },
+  { day: 20, dayName: "Friday", quote: "You’ve made progress; now make results.", message: "Celebrate your wins this weekend!", icon: Moon, color: "from-amber-800 to-yellow-900", audio: "/audio/exit/day_20.mp3" },
   
   // Extra 2 days (for full month coverage)
   { day: 21, dayName: "Monday", quote: "Close strong so you go home strong.", message: "Rest tonight. Rise tomorrow.", icon: Moon, color: "from-cyan-800 to-teal-900", audio: "/audio/exit/day_21.mp3" },
-  { day: 22, dayName: "Tuesday", quote: "Today’s closing effort shapes tomorrow’s success.", message: "Sleep well. Tomorrow is yours to conquer.", icon: Sunset, color: "from-purple-800 to-pink-900", audio: "/audio/exit/day_22.mp3" },
+  { day: 22, dayName: "Tuesday", quote: "Today’s closing effort shapes tomorrow’s success.", message: "Sleep well. Tomorrow is yours to conquer.", icon: Moon, color: "from-purple-800 to-pink-900", audio: "/audio/exit/day_22.mp3" },
 ];
 
 // Function to get current working day number (1-22) based on UTC-6 timezone
@@ -370,7 +370,7 @@ export default function OffTimeScreen({ isVisible }) {
                 Working Day
               </div>
               <div className="text-white text-4xl xl-plus:text-5xl font-black">
-                Day {currentQuote.day} • {currentQuote.dayName}
+                {currentQuote.dayName}
               </div>
             </div>
           </div>
