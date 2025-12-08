@@ -17,10 +17,10 @@ class ErrorBoundary extends React.Component {
   componentDidCatch(error, errorInfo) {
     console.error("ErrorBoundary caught an error:", error, errorInfo)
     
-    // Auto reload after 30 seconds
+    // Auto reload after 10 seconds
     this.reloadTimer = setTimeout(() => {
       window.location.reload()
-    }, 30000)
+    }, 10000)
   }
 
   componentWillUnmount() {
