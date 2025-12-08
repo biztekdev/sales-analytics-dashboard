@@ -564,7 +564,7 @@ useEffect(() => {
     const minutes = now.getMinutes();
 
     // Hit API only at 4:33 AM once per day
-    if (hours === 12 && minutes === 0 && !birthdayShownToday) {
+    if (hours === 24 && minutes === 0 && !birthdayShownToday) {
       try {
        
         const response = await fetch('/api/birthday');

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@google-cloud/text-to-speech": "^6.4.0",
+    "canvas-confetti": "^1.9.4",
     "framer-motion": "^12.23.19",
     "lottie-react": "^2.4.1",
     "lucide-react": "^0.542.0",
