@@ -40,11 +40,12 @@ export function useDesignAndDieAnalytics() {
   }
 }
 export function useMessage() {
-  const { message, sendMessage, error, isConnected } = useSocketContext()
+  const { message, sendMessage, error, isConnected, notification } = useSocketContext()
   return {
     message,
     sendMessage,
     error,
+    notification,
     isConnected,
   }
 }

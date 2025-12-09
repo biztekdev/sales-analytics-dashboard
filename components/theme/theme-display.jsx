@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useTheme } from "./theme-context";
-import { useSalesAnalytics } from "../socket/useSocketData";
+import { useMessage, useSalesAnalytics } from "../socket/useSocketData";
 import GoodMorning from "../goodMorning";
 import GoodNight from "../goodNight";
 import MotivationalGreeting from "../motivationalGreeting";
@@ -15,6 +15,7 @@ import SalesMarquee from "../SalesDashboard/salesMarquee";
 import SummaryCom from "../SalesDashboard/summaryCom";
 import { Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
+import CelebrationScreen from "../highSale";
 
 // Ring Tones Library - defined outside component to avoid recreation
 const ringTones = {
@@ -327,6 +328,14 @@ export default function ThemeDisplay() {
   const { theme } = useTheme();
   const { data: salesData, loading } = useSalesAnalytics();
   const [showGreeting, setShowGreeting] = useState(false);
+  const {notification  } = useMessage()
+   useEffect(() => {
+    if (notification) {
+      console.log("New Notification:", notification);
+    }
+  }, [notification]);
+
+
   const [showMotivational, setShowMotivational] = useState(false);
   const [showBreakTimeQuotes, setShowBreakTimeQuotes] = useState(false);
   const [showOffTimeScreen, setShowOffTimeScreen] = useState(false);
@@ -337,6 +346,7 @@ export default function ThemeDisplay() {
   const [offTimeShownToday, setOffTimeShownToday] = useState(false);
   const [birthdayShownToday, setBirthdayShownToday] = useState(false);
   console.log(birthdayShownToday, "birthdayShow");
+  const [showCelebration, setShowCelebration] = useState(false);
   
   const [isAnimating, setIsAnimating] = useState(false);
   const [opacity, setOpacity] = useState(1);
@@ -654,6 +664,29 @@ useEffect(() => {
 }, [birthdayShownToday]);
 
 
+useEffect(() => {
+  if(notification && notification.isCelebration === true){
+    setShowCelebration(true);
+    setShowGreeting(false);
+    setShowSalesDashboard(false);
+    setShowSummary(false);
+    setShowMotivational(false);
+    setShowBreakTimeQuotes(false);
+    setShowOffTimeScreen(false);
+    setShowBirthday(false);
+
+
+     setOffTimeShownToday(false);
+       
+    // Hide after 30 seconds
+    setTimeout(() =>  {
+      setShowCelebration(false);
+
+      setShowSalesDashboard(true);
+    }, 10000);
+  }
+}, [notification]);
+
   // Check for 4:32 PM to show motivational greeting
   useEffect(() => {
     const checkMotivationalTime = () => {
@@ -741,7 +774,7 @@ useEffect(() => {
       const minutes = now.getMinutes();
       
       // Show off time screen at specific time (e.g., 6:00 PM / 18:00)
-      if (hours === 4 && minutes === 45 && !offTimeShownToday) {
+      if (hours === 4 && minutes === 58 && !offTimeShownToday) {
         setOffTimeShownToday(true);
         setShowOffTimeScreen(true);
         setShowGreeting(false);
@@ -1086,6 +1119,9 @@ useEffect(() => {
     return <MotivationalGreeting isVisible={true} />;
   }
 
+  if(showCelebration){
+    return <CelebrationScreen isVisible={true} />;
+  }
   // Always show main dashboard
   return (
     <div

@@ -1,12 +1,23 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import { Volume2, VolumeX, Share2, Trophy, Sparkles } from "lucide-react"
+import { useMessage } from "../socket/useSocketData"
 
 export default function CelebrationScreen() {
-
   const [particles, setParticles] = useState([])
-
+  const [showFalling, setShowFalling] = useState(false)
+  const [audioStarted, setAudioStarted] = useState(false);
+  const [celebrationData, setCelebrationData] = useState(null);
+  const audioRef = useRef(null);
+  
+  const {notification  } = useMessage()
+     useEffect(() => {
+      if (notification) {
+        setCelebrationData(notification);
+        console.log("New Notification:", notification);
+      }
+    }, [notification]);
   const formatNumber = (num) => {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
@@ -16,7 +27,7 @@ export default function CelebrationScreen() {
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
-      size: Math.random() * 8 + 3,
+      size: Math.random() * 4 + 3,
       xlPlusSize: Math.random() * 12 + 4,
       duration: Math.random() * 3 + 5,
     }))
@@ -25,31 +36,59 @@ export default function CelebrationScreen() {
 
   // Fire premium confetti bursts using canvas-confetti
   useEffect(() => {
-    let intervalId
-    let confettiInstance
+    let intervalId;
+    let confettiInstance;
+    let isUnmounted = false;
 
     const launch = async () => {
-      const module = await import("canvas-confetti")
-      confettiInstance = module.default
-      const shoot = () => {
-        const defaults = { origin: { y: 0.1 }, ticks: 200, zIndex: 9999 }
-        confettiInstance({ ...defaults, particleCount: 120, spread: 80, startVelocity: 55, scalar: 1 })
-        confettiInstance({ ...defaults, particleCount: 80, spread: 120, startVelocity: 65, scalar: 1.2, angle: 60, origin: { x: 0.1, y: 0.2 } })
-        confettiInstance({ ...defaults, particleCount: 80, spread: 120, startVelocity: 65, scalar: 1.2, angle: 120, origin: { x: 0.9, y: 0.2 } })
-      }
-      shoot()
-      intervalId = setInterval(shoot, 2800)
-    }
+      const module = await import("canvas-confetti");
+      confettiInstance = module.default;
 
-    launch()
+      const shoot = () => {
+        if (isUnmounted) return;
+        const defaults = { origin: { y: 0.1 }, ticks: 300, zIndex: 9999 };
+        confettiInstance({ ...defaults, particleCount: 250, spread: 120, startVelocity: 80, scalar: 1.5 });
+        confettiInstance({ ...defaults, particleCount: 200, spread: 140, startVelocity: 90, scalar: 1.5, angle: 60, origin: { x: 0.1, y: 0.2 } });
+        confettiInstance({ ...defaults, particleCount: 200, spread: 140, startVelocity: 90, scalar: 1.5, angle: 120, origin: { x: 0.9, y: 0.2 } });
+      };
+      shoot();
+      intervalId = setInterval(shoot, 4000);
+    };
+    launch();
 
     return () => {
-      if (intervalId) clearInterval(intervalId)
-      if (confettiInstance) confettiInstance.reset?.()
-    }
+      isUnmounted = true;
+      if (intervalId) clearInterval(intervalId);
+      if (confettiInstance && confettiInstance.reset) confettiInstance.reset();
+    };
   }, [])
 
-
+  // Play fireworks sound on mount, fallback to user interaction if autoplay fails
+  useEffect(() => {
+    const audio = new window.Audio('/audio/firework.mp3');
+    audio.loop = true;
+    audioRef.current = audio;
+    audio.play().then(() => {
+      setAudioStarted(true);
+    }).catch(() => {
+      setAudioStarted(false);
+    });
+    // Fallback: play on first user interaction if autoplay fails
+    const resumeAudio = () => {
+      if (!audioStarted) {
+        audio.play().then(() => setAudioStarted(true));
+      }
+    };
+    window.addEventListener('click', resumeAudio);
+    window.addEventListener('touchstart', resumeAudio);
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+      window.removeEventListener('click', resumeAudio);
+      window.removeEventListener('touchstart', resumeAudio);
+    };
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <main className="relative min-h-screen w-full overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-black">
@@ -95,7 +134,7 @@ export default function CelebrationScreen() {
         {/* Main heading section */}
         <div className="text-center space-y-6 xl-plus:space-y-12 mb-16 xl-plus:mb-32">
           <div className="space-y-2 xl-plus:space-y-4 ">
-            <h1 className="text-8xl md:text-9xl  xl-plus:text-[300px] font-black  bg-clip-text text-[#51C8FF] bg-gradient-to-r from-blue-300 via-cyan-300 to-blue-400 leading-tight  italic" style={{ fontFamily: "'" }}>
+            <h1 className="text-8xl md:text-9xl  xl-plus:text-[300px] font-black  bg-clip-text   text-[#51C8FF] bg-gradient-to-r from-purple-500 via-blue-500 to-purple-500 leading-tight  italic" style={{ fontFamily: "'" }}>
               Record Broken 
             </h1>
             {/* <h3 className="text-6xl md:text-7xl xl-plus:text-[220px] font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-cyan-200 mt-4 xl-plus:mt-8">
@@ -110,7 +149,7 @@ export default function CelebrationScreen() {
           
           {/* Name with neon lights effect */}
           <div className="mt-8 xl-plus:mt-16">
-            <h1  className="text-6xl font-black md:text-8xl xl-plus:text-[250px] tracking-wider relative inline-block">
+            <span  className="text-6xl md:text-8xl xl-plus:text-[280px] tracking-wider font-extrabold relative inline-block">
               <span  className="relative text-transparent bg-clip-text animate-[blink_3s_ease-in-out_infinite,shimmer_3s_linear_infinite]" style={{
                 backgroundImage: 'linear-gradient(90deg, #93c5fd 0%, #67e8f9 25%, #60a5fa 50%, #93c5fd 75%, #67e8f9 100%)',
                 backgroundSize: '200% 100%',
@@ -118,9 +157,10 @@ export default function CelebrationScreen() {
                 backgroundClip: 'text',
                 fontWeight: 900
               }}>
-                Ali Hassan
+               
+                {celebrationData?.agentName}
               </span>
-            </h1>
+            </span>
           </div>
         </div>
 
@@ -128,11 +168,11 @@ export default function CelebrationScreen() {
         <div className="mb-16 xl-plus:mb-32">
           <div className="text-center space-y-4 xl-plus:space-y-8">
             <span className="text-9xl md:text-[12rem] xl-plus:text-[500px] font-black bg-clip-text text-transparent bg-gradient-to-r from-blue-300 via-cyan-300 to-blue-400" >
-              ${formatNumber(90000)} 
+              ${formatNumber(notification?.amount || 0)} 
             </span>
-            <p className="text-2xl md:text-3xl xl-plus:text-7xl text-blue-200/70 font-light tracking-wider uppercase">
+            {/* <p className="text-2xl md:text-3xl xl-plus:text-7xl text-blue-200/70 font-light tracking-wider uppercase">
               Amount Received
-            </p>
+            </p> */}
           </div>
         </div>
 
@@ -142,12 +182,33 @@ export default function CelebrationScreen() {
         </p>
       </div>
 
-      {/* Audio element */}
-      {/* <audio
-        ref={audioRef}
-        src="data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAAB9AAACABAAZGF0YQIAAAAAAA=="
-        loop
-      /> */}
+      {/* Play Sound button if audio not started */}
+      {/* {!audioStarted && (
+        <button
+          onClick={() => {
+            if (audioRef.current) {
+              audioRef.current.play().then(() => setAudioStarted(true));
+            }
+          }}
+          style={{
+            position: 'fixed',
+            bottom: 32,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 9999,
+            background: '#222',
+            color: '#fff',
+            padding: '16px 32px',
+            borderRadius: '999px',
+            fontSize: '1.5rem',
+            boxShadow: '0 2px 16px #0008',
+            border: 'none',
+            cursor: 'pointer',
+          }}
+        >
+          🔊 Play Fireworks Sound
+        </button>
+      )} */}
 
       <style jsx>{`
         @keyframes float {
