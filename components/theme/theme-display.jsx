@@ -16,6 +16,7 @@ import SummaryCom from "../SalesDashboard/summaryCom";
 import { Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import CelebrationScreen from "../highSale";
+import NormalSaleScreen from "../normalSale";
 
 // Ring Tones Library - defined outside component to avoid recreation
 const ringTones = {
@@ -362,7 +363,9 @@ export default function ThemeDisplay() {
   const [slideX, setSlideX] = useState(0);
   const [brightness, setBrightness] = useState(1);
   const [contrast, setContrast] = useState(1);
+  const [showNormalSale ,setShowNormalSale] = useState(false);
   const [voices, setVoices] = useState([]);
+  
 
   const [selectedRingTone, setSelectedRingTone] = useState(() => {
     // Load from localStorage or use default (Nadra style)
@@ -565,57 +568,41 @@ export default function ThemeDisplay() {
     };
   }, [selectedRingTone]);
 
-  // Check for birthday at 12:00 PM (noon)
-
+  // Check for birthday at 11:58 PM, add 1 to local date, and show at 12:00 AM if match
 useEffect(() => {
   const checkBirthdayTime = async () => {
     const now = new Date();
     const hours = now.getHours();
     const minutes = now.getMinutes();
 
-    // Hit API only at 4:33 AM once per day
-   if (hours === 23 && ( minutes === 58 || minutes === 59) && !birthdayShownToday) {
+    // At 11:58 PM
+    if (hours === 23 && minutes === 58 && !birthdayShownToday) {
       try {
-       
         const response = await fetch('/api/birthday');
         const data = await response.json();
-       
-
-        // Handle API response with "all" array
         const birthdayArray = data?.all || data || [];
-        
         if (birthdayArray && birthdayArray.length > 0) {
-          const firstBirthday = birthdayArray[0];
-          const today = new Date();
-          
-        
-          
-          // Get the date_of_birth field
-          const dateField = firstBirthday.date_of_birth;
-          
-          if (dateField) {
-            // Parse the date string and ignore year
-            const dateParts = dateField.split('-'); // Format: YYYY-MM-DD
-            const birthdayMonth = parseInt(dateParts[1]) - 1; // Month is 0-indexed
-            const birthdayDay = parseInt(dateParts[2]);
-            
-            const today = new Date();
-            const todayMonth = today.getMonth();
-            const todayDay = today.getDate();
-            
+          // Check first 5 entries for tomorrow's birthday
+          const tomorrow = new Date(now);
+          tomorrow.setDate(now.getDate() + 1);
+          const tomorrowMonth = tomorrow.getMonth();
+          const tomorrowDay = tomorrow.getDate();
 
-            // Compare month and day only (ignore year)
-            if 
-            // (birthdayDay === todayDay && birthdayMonth === todayMonth)
-             (
-  (birthdayDay === todayDay && birthdayMonth === todayMonth) || 
-  (birthdayDay === todayDay + 1 && birthdayMonth === todayMonth)
-)
-            {
-              
-              
-              setBirthdayName(firstBirthday.name || "Friend");
-              setBirthdayShownToday(true);
+          // Find all matches in first 5
+          const birthdayMatches = birthdayArray.slice(0, 5).filter(b => {
+            if (!b.date_of_birth) return false;
+            const dateParts = b.date_of_birth.split('-');
+            const birthdayMonth = parseInt(dateParts[1]) - 1; // 0-indexed
+            const birthdayDay = parseInt(dateParts[2]);
+            return birthdayDay === tomorrowDay && birthdayMonth === tomorrowMonth;
+          });
+
+          if (birthdayMatches.length > 0) {
+            setBirthdayShownToday(true);
+            const msToMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0) - now;
+            setTimeout(() => {
+              // Pass all names to Birthday component
+              setBirthdayName(birthdayMatches.map(b => b.name || "Friend"));
               setShowBirthday(true);
               setShowGreeting(false);
               setShowSalesDashboard(false);
@@ -623,69 +610,59 @@ useEffect(() => {
               setShowMotivational(false);
               setShowBreakTimeQuotes(false);
               setShowOffTimeScreen(false);
-
-
-              // Hide after 30 seconds
               setTimeout(() => {
                 setShowBirthday(false);
                 setShowSalesDashboard(true);
               }, 30000);
-            } else {
-              
-              setBirthdayShownToday(true);
-            }
+            }, msToMidnight);
           } else {
-           
             setBirthdayShownToday(true);
           }
         } else {
-        
           setBirthdayShownToday(true);
         }
       } catch (err) {
-        console.error('❌ Birthday API error:', err);
         setBirthdayShownToday(true);
       }
     }
-
     // Reset flag for next day at midnight
     if (hours === 0 && minutes === 0) {
-      console.log('🕛 Midnight - Reset birthday flag for tomorrow');
       setBirthdayShownToday(false);
     }
   };
-
-  // Check on mount
   checkBirthdayTime();
-  
-  // Check every 1 minute
   const interval = setInterval(checkBirthdayTime, 60000);
   return () => clearInterval(interval);
 }, [birthdayShownToday]);
 
+  useEffect(() => {
+    if (notification && notification.isCelebration === true) {
+      setShowGreeting(false);
+      setShowSalesDashboard(false);
+      setShowSummary(false);
+      setShowMotivational(false);
+      setShowBreakTimeQuotes(false);
+      setShowOffTimeScreen(false);
+      setShowBirthday(false);
+      setOffTimeShownToday(false);
 
-useEffect(() => {
-  if(notification && notification.isCelebration === true){
-    setShowCelebration(true);
-    setShowGreeting(false);
-    setShowSalesDashboard(false);
-    setShowSummary(false);
-    setShowMotivational(false);
-    setShowBreakTimeQuotes(false);
-    setShowOffTimeScreen(false);
-    setShowBirthday(false);
-
-
-     setOffTimeShownToday(false);
-       
-    // Hide after 30 seconds
-    setTimeout(() =>  {
-      setShowCelebration(false);
-
-      setShowSalesDashboard(true);
-    }, 10000);
-  }
-}, [notification]);
+      if (notification.isPremium === true) {
+        setShowCelebration(true);
+        // Hide after 10 seconds
+        setTimeout(() => {
+          setShowCelebration(false);
+          setShowSalesDashboard(true);
+        }, 10000);
+      } else {
+        // Show normalSale screen
+        setShowNormalSale(true);
+        setTimeout(() => {
+          setShowNormalSale(false);
+          setShowSalesDashboard(true);
+        }, 10000);
+      }
+    }
+  }, [notification]);
 
   // Check for 4:32 PM to show motivational greeting
   useEffect(() => {
@@ -1121,6 +1098,9 @@ useEffect(() => {
 
   if(showCelebration){
     return <CelebrationScreen isVisible={true} />;
+  }
+  if(showNormalSale){
+    return <NormalSaleScreen isVisible={true} />;
   }
   // Always show main dashboard
   return (

@@ -89,6 +89,22 @@ export default function BirthdayPremium({ isVisible, name = "Friend" }) {
 
   if (!isVisible || !isClient) return null
 
+  // Format name(s) for display
+  let displayName = "";
+  if (Array.isArray(name)) {
+    if (name.length === 1) {
+      displayName = name[0];
+    } else if (name.length === 2) {
+      displayName = `${name[0]} & ${name[1]}`;
+    } else if (name.length > 2) {
+      displayName = name.slice(0, -1).join(", ") + ` & ${name[name.length - 1]}`;
+    } else {
+      displayName = "Friend";
+    }
+  } else {
+    displayName = name || "Friend";
+  }
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: { opacity: 1 },
@@ -279,7 +295,7 @@ export default function BirthdayPremium({ isVisible, name = "Friend" }) {
                 textShadow: "0 0 30px rgba(0, 0, 0, 0.4)",
               }}
             >
-              {name || "Bro"}
+              {displayName}
             </motion.div>
 
             <motion.p
