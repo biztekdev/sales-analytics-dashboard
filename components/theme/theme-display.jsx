@@ -354,7 +354,13 @@ export default function ThemeDisplay() {
   const [blur, setBlur] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const [selectedVoice, setSelectedVoice] = useState(null);
+  const [selectedVoice, setSelectedVoice] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('selectedVoiceIndex');
+      return saved !== null ? Number(saved) : null;
+    }
+    return null;
+  });
   const [userNames, setUserNames] = useState([]);
   const [showSummary, setShowSummary] = useState(false);
   const [showSalesDashboard, setShowSalesDashboard] = useState(true);
@@ -387,6 +393,13 @@ export default function ThemeDisplay() {
     const loadVoices = () => {
       const availableVoices = window.speechSynthesis.getVoices();
       setVoices(availableVoices);
+      // Restore selected voice from localStorage if available
+      if (typeof window !== 'undefined') {
+        const saved = localStorage.getItem('selectedVoiceIndex');
+        if (saved !== null && availableVoices[saved]) {
+          setSelectedVoice(Number(saved));
+        }
+      }
     };
 
     loadVoices();
@@ -456,25 +469,27 @@ export default function ThemeDisplay() {
   }, []);
 
   // Function to speak user name
-  const speakUserName = (userName, selectedVoice = null) => {
+  const speakUserName = (userName, selectedVoiceIndex = null) => {
     console.log("Attempting to speak user name:", userName);
     if (!userName || typeof window === "undefined") return;
 
     try {
       if ("speechSynthesis" in window) {
         const utterance = new SpeechSynthesisUtterance(userName);
-        utterance.lang = "en-US"; // Set language to Urdu (Pakistan)
-        utterance.rate = 0.9; // Slightly slower
+        utterance.lang = "en-US";
+        utterance.rate = 0.9;
         utterance.pitch = 1.1;
         utterance.volume = 1;
 
         // Cancel any ongoing speech
         window.speechSynthesis.cancel();
-        if (selectedVoice) {
-          utterance.voice = selectedVoice;
+        if (
+          selectedVoiceIndex !== null &&
+          voices &&
+          voices[selectedVoiceIndex]
+        ) {
+          utterance.voice = voices[selectedVoiceIndex];
         }
-
-        // Speak the user name
         window.speechSynthesis.speak(utterance);
         console.log(`🗣️ Speaking user name: ${userName}`);
       }
@@ -530,16 +545,19 @@ export default function ThemeDisplay() {
       console.log("Audio error:", error);
     }
   };
+  // Only speak when user name actually changes
+  const lastSpokenNameRef = useRef(null);
   useEffect(() => {
     if (userNames.length === 0) return;
-
     const currentName = userNames[currentIndex];
-    console.log("🎤 Speaking: ", currentName);
-    setTimeout(() => {
-      // playAIvoice(currentName, selectedVoice);
-      speakUserName(currentName, selectedVoice);
-    }, 2000);
-  }, [currentIndex, userNames]);
+    if (lastSpokenNameRef.current !== currentName) {
+      lastSpokenNameRef.current = currentName;
+      console.log("🎤 Speaking: ", currentName);
+      setTimeout(() => {
+        speakUserName(currentName, selectedVoice);
+      }, 2000);
+    }
+  }, [currentIndex, userNames, selectedVoice, voices]);
 
   // Listen for mute state and ring tone changes from localStorage
   useEffect(() => {
@@ -840,93 +858,99 @@ useEffect(() => {
   // Main timer logic - handles both user switching and summary cycling
   useEffect(() => {
     if (userNames.length > 0 && showSalesDashboard) {
-      let userTimer;
-      let summaryTimer;
-      let initialTimer;
+      let userTimer = null;
+      let summaryTimer = null;
+      let resumeTimer = null;
+      let animationTimers = [];
 
-      const startUserCycle = () => {
-        // First, wait 40 seconds before starting the cycle
-        initialTimer = setTimeout(() => {
-          userTimer = setInterval(() => {
-            // Data refresh animation - slide up and fade
-            setIsAnimating(true);
-            setOpacity(0.3);
-            setSlideX(0);
-            setScale(0.95);
-
-            // After slide animation, change user and slide back
-            setTimeout(() => {
-              setCurrentIndex((prev) => {
-                const newIndex = (prev + 1) % userNames.length;
-                // Play ring sound when user changes
-                playRingSound();
-                return newIndex;
-              });
-              setOpacity(1);
-              setScale(1);
-
-              // Reset animation state after animation completes
-              setTimeout(() => {
-                setIsAnimating(false);
-              }, 1000);
-            }, 1000);
-          }, 40000); // 40 seconds user switching
-        }, 40000); // Wait 40 seconds before starting the first cycle
+      const clearAllTimers = () => {
+        if (userTimer) clearInterval(userTimer);
+        if (summaryTimer) clearTimeout(summaryTimer);
+        if (resumeTimer) clearTimeout(resumeTimer);
+        animationTimers.forEach(t => clearTimeout(t));
+        animationTimers = [];
       };
 
-      const startSummaryCycle = () => {
-        // After all users are shown, switch to Summary
-        const totalSalesTime = userNames.length * 40000; // Total time for all users (40 seconds each)
+      // User switching logic
+      const startUserCycle = () => {
+        let index = 0;
+        setCurrentIndex(0);
+        setIsAnimating(false);
+        setOpacity(1);
+        setScale(1);
+        setSlideX(0);
 
-        summaryTimer = setTimeout(() => {
-          clearInterval(userTimer); // Stop user switching
-
-          // Data refresh animation to summary
+        userTimer = setInterval(() => {
           setIsAnimating(true);
           setOpacity(0.3);
           setScale(0.95);
+          setSlideX(0);
+          const anim1 = setTimeout(() => {
+            setCurrentIndex((prev) => {
+              const newIndex = (prev + 1) % userNames.length;
+              playRingSound();
+              return newIndex;
+            });
+            setOpacity(1);
+            setScale(1);
+            const anim2 = setTimeout(() => {
+              setIsAnimating(false);
+            }, 1000);
+            animationTimers.push(anim2);
+          }, 1000);
+          animationTimers.push(anim1);
+        }, 40000);
+      };
 
-          setTimeout(() => {
+      // Summary cycle logic
+      const startSummaryCycle = () => {
+        const totalSalesTime = userNames.length * 40000;
+        summaryTimer = setTimeout(() => {
+          clearInterval(userTimer);
+          setIsAnimating(true);
+          setOpacity(0.3);
+          setScale(0.95);
+          const anim1 = setTimeout(() => {
             setShowSalesDashboard(false);
             setShowSummary(true);
             setOpacity(1);
             setScale(1);
-
-            setTimeout(() => {
+            const anim2 = setTimeout(() => {
               setIsAnimating(false);
-
-              // After 3 minutes (180 seconds), go back to SalesDashboard
-              setTimeout(() => {
-                // Data refresh animation back to dashboard
+              // After 3 minutes, go back to dashboard
+              resumeTimer = setTimeout(() => {
                 setIsAnimating(true);
                 setOpacity(0.3);
                 setScale(0.95);
-
-                setTimeout(() => {
+                const anim3 = setTimeout(() => {
                   setShowSummary(false);
                   setShowSalesDashboard(true);
-                  setCurrentIndex(0); // Reset to first user
+                  setCurrentIndex(0);
                   setOpacity(1);
                   setScale(1);
-
-                  setTimeout(() => {
+                  const anim4 = setTimeout(() => {
                     setIsAnimating(false);
-                    startUserCycle(); // Restart user cycle
+                    clearAllTimers();
+                    startUserCycle();
+                    startSummaryCycle();
                   }, 1000);
+                  animationTimers.push(anim4);
                 }, 1000);
-              }, 180000); // 3 minutes = 180,000 milliseconds
+                animationTimers.push(anim3);
+              }, 180000);
             }, 1000);
+            animationTimers.push(anim2);
           }, 1000);
+          animationTimers.push(anim1);
         }, totalSalesTime);
       };
 
+      clearAllTimers();
       startUserCycle();
       startSummaryCycle();
 
       return () => {
-        clearInterval(userTimer);
-        clearTimeout(summaryTimer);
-        clearTimeout(initialTimer);
+        clearAllTimers();
       };
     }
   }, [userNames.length, showSalesDashboard]);
@@ -1118,8 +1142,15 @@ useEffect(() => {
             <Header />
             <div className="">
               {/* <select
-                onChange={(e) => setSelectedVoice(voices[e.target.value])}
+                value={selectedVoice !== null ? selectedVoice : ''}
+                onChange={e => {
+                  setSelectedVoice(Number(e.target.value));
+                  if (typeof window !== 'undefined') {
+                    localStorage.setItem('selectedVoiceIndex', e.target.value);
+                  }
+                }}
               >
+                <option value="">Default</option>
                 {voices.map((voice, index) => (
                   <option key={index} value={index}>
                     {voice.name} ({voice.lang})
